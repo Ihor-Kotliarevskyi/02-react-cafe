@@ -1,10 +1,15 @@
 import styles from "./VoteStats.module.css";
+import Votes from "../../types/votes";
 
-export default function VoteStats() {
+interface VoteStatsProps {
+  onToggle: () => void;
+}
+
+function VoteStats() {
   return (
     <div className={styles.container}>
       <p className={styles.stat}>
-        Good: <strong>0</strong>
+        Good: <strong>{Votes.good}</strong>
       </p>
       <p className={styles.stat}>
         Neutral: <strong>0</strong>
@@ -21,3 +26,5 @@ export default function VoteStats() {
     </div>
   );
 }
+
+export default VoteStats;

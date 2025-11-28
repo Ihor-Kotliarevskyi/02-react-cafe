@@ -1,7 +1,11 @@
 import css from "./VoteOptions.module.css";
 import { useState } from "react";
 
-export default function VoteOptions() {
+interface VoteOptionsProps {
+  canReset: boolean;
+}
+
+function VoteOptions() {
   const [goodlikes, setGoodLikes] = useState(0);
   const handleGoodClick = () => {
     setGoodLikes(goodlikes + 1);
@@ -43,6 +47,4 @@ export default function VoteOptions() {
   );
 }
 
-// interface VoteOptionsProps {
-//   canReset: boolean;
-// }
+export default VoteOptions;
