@@ -1,28 +1,53 @@
-// import type Votes from "../../types/votes";
-// import type VoteTypes from "../../types/votes";
+import { useState } from "react";
+import styles from "./App.module.css";
 import CafeInfo from "../CafeInfo/CafeInfo";
-import Notification from "../Notification/Notification";
 import VoteOptions from "../VoteOptions/VoteOptions";
 import VoteStats from "../VoteStats/VoteStats";
-import css from "./App.module.css";
-import { useState } from "react";
+import Notification from "../Notification/Notification";
+import type { Votes, VoteType } from "../../types/votes";
 
 function App() {
-  // const votes: Votes = { good: 0, neutral: 0, bad: 0 };
-  // function handleVote(type: VoteTypes) {}
-  // function resetVotes() {}
+  const [votes, setVotes] = useState<Votes>({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  });
 
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const toggleNotifications = () => {
-    setIsOpen((prevIsOpen) => !prevIsOpen);
-  };
+  function handleVote(type: VoteType) {
+    setVotes((prev) => ({
+      ...prev,
+      [type]: prev[type] + 1,
+    }));
+  }
+
+  function resetVotes() {
+    setVotes({ good: 0, neutral: 0, bad: 0 });
+  }
+
+  const totalVotes = votes.good + votes.neutral + votes.bad;
+  const positiveRate = totalVotes
+    ? Math.round((votes.good / totalVotes) * 100)
+    : 0;
 
   return (
-    <div className={css.app}>
+    <div className={styles.app}>
       <CafeInfo />
-      <VoteOptions onToggle={toggleNotifications} />
-      {!isOpen && <VoteStats />}
-      {isOpen && <Notification />}
+
+      <VoteOptions
+        onVote={handleVote}
+        onReset={resetVotes}
+        canReset={totalVotes > 0}
+      />
+
+      {totalVotes > 0 ? (
+        <VoteStats
+          votes={votes}
+          totalVotes={totalVotes}
+          positiveRate={positiveRate}
+        />
+      ) : (
+        <Notification />
+      )}
     </div>
   );
 }

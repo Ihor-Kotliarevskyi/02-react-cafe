@@ -1,48 +1,33 @@
-import css from "./VoteOptions.module.css";
-import { useState } from "react";
+import type { VoteType } from "../../types/votes";
+import styles from "./VoteOptions.module.css";
 
 interface VoteOptionsProps {
+  onVote: (type: VoteType) => void;
+  onReset: () => void;
   canReset: boolean;
 }
 
-function VoteOptions() {
-  const [goodlikes, setGoodLikes] = useState(0);
-  const handleGoodClick = () => {
-    setGoodLikes(goodlikes + 1);
-    console.log(goodlikes);
-  };
-  const [neutrallikes, setNeutralLikes] = useState(0);
-  const handleNeutralClick = () => {
-    setNeutralLikes(neutrallikes + 1);
-    console.log(neutrallikes);
-  };
-  const [badlikes, setBadLikes] = useState(0);
-  const handleBadClick = () => {
-    setBadLikes(badlikes + 1);
-    console.log(badlikes);
-  };
-  const handleResetClick = () => {
-    setGoodLikes(0);
-    setNeutralLikes(0);
-    setBadLikes(0);
-  };
+function VoteOptions({ onVote, onReset, canReset }: VoteOptionsProps) {
   return (
-    <div className={css.container}>
-      <button className={css.button} onClick={handleGoodClick}>
+    <div className={styles.container}>
+      <button className={styles.button} onClick={() => onVote("good")}>
         Good
       </button>
-      <button className={css.button} onClick={handleNeutralClick}>
+      <button className={styles.button} onClick={() => onVote("neutral")}>
         Neutral
       </button>
-      <button className={css.button} onClick={handleBadClick}>
+      <button className={styles.button} onClick={() => onVote("bad")}>
         Bad
       </button>
-      <button
-        className={`${css.button} ${css.reset}`}
-        onClick={handleResetClick}
-      >
-        Reset
-      </button>
+
+      {canReset && (
+        <button
+          className={`${styles.button} ${styles.reset}`}
+          onClick={onReset}
+        >
+          Reset
+        </button>
+      )}
     </div>
   );
 }
